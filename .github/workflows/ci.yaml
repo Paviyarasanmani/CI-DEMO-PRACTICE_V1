@@ -40,7 +40,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/CI-DEMO-PRACTICE_V1/browser
+          path: dist/my-ci-demo/browser
 
   deploy:
     needs: build-and-test
