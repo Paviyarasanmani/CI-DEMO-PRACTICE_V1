@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build -- --configuration production --base-href /my-ci-demo/
+        run: npm run build -- --configuration production --base-href /CI-DEMO-PRACTICE_V1/
 
       - name: Run tests
         run: npm test -- --watch=false --browsers=ChromeHeadless
@@ -40,7 +40,7 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/my-ci-demo/browser
+          path: dist/CI-DEMO-PRACTICE_V1/browser
 
   deploy:
     needs: build-and-test
