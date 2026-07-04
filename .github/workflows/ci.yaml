@@ -1,10 +1,19 @@
-name: Angular CI
+name: Angular CI/CD
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
@@ -23,7 +32,24 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build -- --configuration production
+        run: npm run build -- --configuration production --base-href /my-ci-demo/
 
       - name: Run tests
         run: npm test -- --watch=false --browsers=ChromeHeadless
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/my-ci-demo/browser
+
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
